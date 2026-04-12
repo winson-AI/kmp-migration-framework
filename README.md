@@ -4,12 +4,28 @@ A fully automated, multi-agent powered pipeline for migrating Android projects t
 
 ## Overview
 
-This framework uses an intelligent agentic workflow to:
+This framework uses an intelligent **batch-based** agentic workflow to:
 1. **Comprehend** your Android project structure and dependencies
-2. **Generate** KMP-compatible code using AI agents
-3. **Migrate** tests and create evaluation reports
-4. **Learn** from failures to improve future migrations
-5. **Deliver** results as a ready-to-use KMP project
+2. **Analyze** architecture patterns and file groups
+3. **Migrate** files in batches by type (not one-by-one)
+4. **Generate** shared utilities and KMP structure
+5. **Evaluate** with comprehensive testing (metrics + LLM + multi-modal)
+6. **Learn** from failures to improve future migrations
+7. **Deliver** results as a ready-to-use KMP project
+
+### Key Improvement: Batch Migration
+
+**OLD Approach** (file-by-file):
+- ❌ Each file migrated in isolation
+- ❌ No architecture-level decisions
+- ❌ Duplicate work for similar patterns
+- ❌ Slow and inefficient
+
+**NEW Approach** (batch-based):
+- ✅ Files grouped by pattern (ViewModels, Activities, etc.)
+- ✅ Architecture context shared across batch
+- ✅ Dependency-aware migration order
+- ✅ 3-5x faster migration
 
 ## Quick Start
 

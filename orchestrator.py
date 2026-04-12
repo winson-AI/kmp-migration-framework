@@ -12,6 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'supervisor'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'reporting'))
 
 from analyze_project import analyze_android_project
+from batch_migration import BatchMigrator
 from generate_code import generate_kmp_code
 from migrate_tests import migrate_tests
 from evaluate_code import evaluate_code
@@ -36,9 +37,19 @@ class KmpMigrationPipeline:
         print("\n--- Phase 1: Comprehension ---")
         analyze_android_project(self.project_path)
 
-        # Phase 2: Code Generation
-        print("\n--- Phase 2: Code Generation ---")
-        generate_kmp_code(self.project_path, self.delegate_task)
+        # Phase 2: Batch Code Migration (NEW - Holistic approach)
+        print("\n--- Phase 2: Batch Code Migration ---")
+        print("Analyzing project structure and migrating in batches...")
+        
+        if self.delegate_task:
+            migrator = BatchMigrator(self.project_path, self.delegate_task)
+        else:
+            migrator = BatchMigrator(self.project_path)
+        
+        migration_plan = migrator.analyze_project()
+        migration_results = migrator.migrate_all()
+        
+        print(f"\n✓ Migrated {len(migration_results['migrated_files'])} files in {len(migration_plan.file_groups)} batches")
 
         # Phase 3: Test Migration
         print("\n--- Phase 3: Test Migration ---")
