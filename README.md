@@ -144,9 +144,46 @@ After running the pipeline, each project will have:
 |------|----------|-------------|
 | `SPEC.md` | `{project_path}/` | Migration specification |
 | `TEST_MIGRATION_PLAN.md` | `{project_path}/` | Test migration strategy |
-| `EVALUATION_REPORT.md` | `{project_path}/` | Code evaluation results |
+| `EVALUATION_REPORT.md` | `{project_path}/` | Legacy evaluation results |
+| `COMPREHENSIVE_TEST_REPORT.md` | `{project_path}/` | **New: Full evaluation with all metrics** |
+| `test_results.json` | `{project_path}/` | **New: Machine-readable results** |
 | `MIGRATION_REPORT.md` | `{project_path}/` | Final migration summary |
 | `migrated_kmp_project/` | `{project_path}/` | **Complete KMP project** |
+
+### Comprehensive Testing Reports
+
+The framework now includes three evaluation methods:
+
+#### 1. Traditional Metrics
+- Compilation status and errors
+- Code statistics (LOC, classes, functions)
+- Test coverage estimation
+- Dependency compatibility analysis
+- Code complexity metrics
+- Platform compatibility score
+
+#### 2. LLM-as-a-Judge
+- Code correctness (1-10)
+- KMP best practices (1-10)
+- Code quality (1-10)
+- Platform separation (1-10)
+- Dependency usage (1-10)
+- Error handling (1-10)
+- Testing (1-10)
+- Documentation (1-10)
+- Performance (1-10)
+- Maintainability (1-10)
+- Architecture pattern detection
+- Before/after code comparison
+
+#### 3. Multi-Modal Evaluation
+- Accessibility score
+- Design system compliance
+- Responsive design score
+- UI component analysis
+- Cross-platform compatibility
+- Screenshot comparison (with vision AI)
+- Platform-specific code detection
 
 ### Migrated Project Structure
 
@@ -206,7 +243,64 @@ Migration report generated at /path/to/project/MIGRATION_REPORT.md
 | Files Migrated | All `.kt` and `.java` files in `src/` directories |
 | Dependencies Analyzed | All dependencies from `build.gradle` files |
 | Tests Migrated | Unit tests + Instrumented tests |
-| Success Rate | Tracked in `EVALUATION_REPORT.md` |
+| Success Rate | Tracked in `COMPREHENSIVE_TEST_REPORT.md` |
+
+## Comprehensive Testing
+
+The framework includes three complementary evaluation methods:
+
+### Traditional Metrics (`testing/metrics.py`)
+
+Automated analysis of code quality and project structure:
+
+**Metrics collected:**
+- Compilation status and errors
+- Code statistics (LOC, classes, functions)
+- Test coverage estimation
+- Dependency compatibility check
+- Code complexity analysis
+- Platform compatibility score
+
+### LLM-as-a-Judge (`testing/llm_judge.py`)
+
+AI-powered code quality evaluation:
+
+**Evaluation criteria (1-10 scale):**
+- Correctness, KMP Best Practices, Code Quality
+- Platform Separation, Dependency Usage
+- Error Handling, Testing, Documentation
+- Performance, Maintainability
+
+### Multi-Modal Evaluation (`testing/multimodal.py`)
+
+UI and visual analysis for Compose projects:
+
+**Analysis includes:**
+- Accessibility score
+- Design system compliance
+- Responsive design evaluation
+- Cross-platform UI compatibility
+- Screenshot comparison (with vision AI)
+
+### Running Comprehensive Tests
+
+```python
+from testing.comprehensive import ComprehensiveTesting
+
+testing = ComprehensiveTesting(
+    project_path='/path/to/project',
+    migrated_project_path='/path/to/migrated',
+    delegate_task=ai_function,
+    vision_analyze=vision_function
+)
+
+results = testing.run_all_evaluations()
+print(f"Overall Score: {results['overall_score']}/100")
+```
+
+**Output files:**
+- `COMPREHENSIVE_TEST_REPORT.md` - Human-readable report
+- `test_results.json` - Machine-readable results
 
 ### Example: BookKeeper Project
 
@@ -240,6 +334,93 @@ BookKeeper/
 ```
 
 ## Configuration
+
+### LLM Provider Setup
+
+The framework supports multiple LLM providers. Configure via environment variables or code:
+
+#### Environment Variables
+```bash
+# Ollama (default - no API key needed)
+export OLLAMA_HOST=localhost:11434
+
+# Dashscope/Qwen
+export DASHSCOPE_API_KEY=your-api-key
+
+# OpenAI
+export OPENAI_API_KEY=your-api-key
+
+# Anthropic
+export ANTHROPIC_API_KEY=your-api-key
+```
+
+#### Code Configuration
+```python
+from llm import LLMInvoker, LLMConfig, LLMProvider
+
+# Ollama (local)
+invoker = LLMInvoker(
+    provider='ollama',
+    model='qwen2.5-coder:7b',
+    base_url='http://localhost:11434'
+)
+
+# Dashscope/Qwen
+invoker = LLMInvoker(
+    provider='dashscope',
+    model='qwen-max',
+    api_key='your-api-key'
+)
+
+# OpenAI
+invoker = LLMInvoker(
+    provider='openai',
+    model='gpt-4',
+    api_key='your-api-key'
+)
+
+# Custom config
+config = LLMConfig(
+    provider=LLMProvider.OLLAMA,
+    model='qwen2.5-coder',
+    temperature=0.3,  # Lower for more deterministic output
+    max_tokens=8192,
+    retry_count=3
+)
+invoker = LLMInvoker(config=config)
+```
+
+### Prompt Management
+
+```python
+from llm import PromptManager
+
+prompts = PromptManager()
+
+# List available templates
+templates = prompts.list_templates()
+for t in templates:
+    print(f"{t['id']}: {t['description']}")
+
+# Render a template
+result = prompts.render('code_migration',
+    file_path='MainActivity.kt',
+    source_code=code,
+    target_module='shared/src/commonMain/kotlin'
+)
+print(result.rendered_prompt)
+print(f"Token estimate: {result.token_estimate}")
+
+# Create custom template
+from llm import PromptTemplate
+template = PromptTemplate(
+    id='my_custom_template',
+    name='My Template',
+    description='Custom migration template',
+    template='Migrate this code: {{source_code}}'
+)
+prompts.save_template(template)
+```
 
 ### Customizing the Pipeline
 

@@ -1,46 +1,54 @@
 import os
-import argparse
+import sys
 
-def evaluate_code(project_path):
+# Add testing subdirectory to path
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+try:
+    from .comprehensive import ComprehensiveTesting
+except ImportError:
+    from comprehensive import ComprehensiveTesting
+
+def evaluate_code(project_path, delegate_task=None, vision_analyze=None):
     """
-    Simulates running the test suite and provides an evaluation report.
+    Comprehensive code evaluation using traditional metrics, LLM-as-a-Judge, and multi-modal analysis.
     """
-    # In a real implementation, this script would:
-    # 1. Copy the translated code to the KMP project template.
-    # 2. Run the migrated tests using a test runner (e.g., Gradle).
-    # 3. Parse the test results and generate a report.
-
-    print("Simulating test execution...")
-    test_results = {
-        "total_tests": 10,
-        "passed": 8,
-        "failed": 2,
-        "errors": [
-            "Testcase 'testLogin' failed: expected <200> but was <401>",
-            "Testcase 'testProfile' failed: NullPointerException"
-        ]
-    }
-
-    report = f"""
-# Evaluation Report
-
-- **Total Tests:** {test_results['total_tests']}
-- **Passed:** {test_results['passed']}
-- **Failed:** {test_results['failed']}
-
-## Errors and Failures
-"""
-    for error in test_results['errors']:
-        report += f"- {error}\n"
-
-    report_path = os.path.join(project_path, "EVALUATION_REPORT.md")
-    with open(report_path, "w") as f:
-        f.write(report)
-
-    print(f"Evaluation report generated at {report_path}")
-    if test_results['failed'] > 0:
-        print("There are failing tests. The code needs to be revised.")
-        # This is where the script would trigger the feedback loop,
-        # sending the report back to the generation script.
-
-
+    migrated_project_path = os.path.join(project_path, 'migrated_kmp_project')
+    
+    if not os.path.exists(migrated_project_path):
+        print(f"Warning: Migrated project not found at {migrated_project_path}")
+        print("Running evaluation on original project structure...")
+        migrated_project_path = project_path
+    
+    # Initialize comprehensive testing
+    testing = ComprehensiveTesting(
+        project_path=project_path,
+        migrated_project_path=migrated_project_path,
+        delegate_task=delegate_task,
+        vision_analyze=vision_analyze
+    )
+    
+    # Run all evaluations
+    results = testing.run_all_evaluations()
+    
+    # Export JSON results
+    testing.export_results_json()
+    
+    # Print summary
+    print("\n" + "="*60)
+    print("EVALUATION SUMMARY")
+    print("="*60)
+    print(f"Overall Score: {results.get('overall_score', 0)}/100")
+    
+    if results.get('overall_score', 0) >= 80:
+        print("Status: ✅ EXCELLENT - Ready for production")
+    elif results.get('overall_score', 0) >= 60:
+        print("Status: ⚠️ GOOD - Minor improvements recommended")
+    elif results.get('overall_score', 0) >= 40:
+        print("Status: ⚡ NEEDS WORK - Significant improvements needed")
+    else:
+        print("Status: ❌ CRITICAL - Major refactoring required")
+    
+    print("="*60)
+    
+    return results
