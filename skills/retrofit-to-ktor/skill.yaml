@@ -1,0 +1,5 @@
+name: Retrofit to Ktor
+id: retrofit-to-ktor
+description: A skill for migrating Retrofit API definitions to Ktor.
+android_dependency: com.squareup.retrofit2:retrofit
+kmp_equivalent: io.ktor:ktor-client-core
