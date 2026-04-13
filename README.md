@@ -4,129 +4,181 @@
 
 ---
 
-## What You Need (INPUT)
-
-### 1. Your Android Project
-
-Your project must look like this:
+## What You'll Do (3 Steps)
 
 ```
-/your/project/path/
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/          ← Your Kotlin/Java files here
-│   │   │   │   └── com/
-│   │   │   │       └── example/
-│   │   │   │           ├── MainActivity.kt
-│   │   │   │           └── OtherFile.kt
-│   │   │   └── AndroidManifest.xml
-│   │   ├── test/              ← Your tests (optional)
-│   │   └── androidTest/       ← Your tests (optional)
-│   └── build.gradle           ← Required
-├── settings.gradle            ← Required
-└── build.gradle               ← Required
-```
-
-### 2. Know Your Project Path
-
-Find the **full path** to your project:
-
-**On Mac/Linux:**
-```bash
-cd /your/project/path
-pwd
-```
-
-**Output will be like:**
-```
-/Users/yourname/CodeBase/BookKeeper
-```
-
-**Copy this path!** You need it for the command.
-
----
-
-## What You Get (OUTPUT)
-
-After migration, you will have:
-
-```
-/your/project/path/
-├── migrated_kmp_project/      ← YOUR NEW KMP PROJECT!
-│   ├── shared/
-│   │   ├── build.gradle.kts
-│   │   └── src/
-│   │       ├── commonMain/kotlin/    ← Shared code here
-│   │       ├── androidMain/kotlin/   ← Android code here
-│   │       └── iosMain/kotlin/       ← iOS code here
-│   ├── androidApp/
-│   │   └── src/main/java/
-│   └── ARCHITECTURE.md
-├── SPEC.md                    ← What was found
-├── COMPREHENSIVE_TEST_REPORT.md  ← Quality score
-└── test_results.json          ← Detailed results
+Step 1: Check your computer has what we need (2 minutes)
+   ↓
+Step 2: Find your Android project path (1 minute)
+   ↓
+Step 3: Run one command (wait 1-5 minutes)
+   ↓
+Done! You have a KMP project!
 ```
 
 ---
 
-## Commands to Run (COPY & PASTE)
+## Step 1: Check Your Computer
 
-### Step 1: Open Terminal
+### Open Terminal
 
-**Mac:** Press `Cmd + Space`, type "Terminal", press Enter
+**Mac:** Press `Command + Space`, type "Terminal", press Enter
 
-**Windows:** Press `Win + R`, type "cmd", press Enter
+**Windows:** Press `Windows + R`, type "cmd", press Enter
 
 **Linux:** Press `Ctrl + Alt + T`
 
-### Step 2: Check Python
+### Check Python
 
-Copy and paste this command:
+Copy and paste this into terminal:
 
 ```bash
 python3 --version
 ```
 
-**Expected output:**
+**You should see:**
 ```
-Python 3.9.x  (or higher)
+Python 3.9.x  (or higher like 3.10, 3.11, 3.12)
 ```
 
-If you see an error, install Python from https://www.python.org/
+**If you see an error** like "command not found":
+- Go to https://www.python.org/
+- Download and install Python
+- Come back and try again
 
-### Step 3: Run the Migration
+### Check Framework
 
-**Copy this command:**
+Copy and paste this:
 
 ```bash
-python3 -c "
-import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
-from orchestrator import run_orchestrator
-run_orchestrator('/YOUR/PROJECT/PATH/HERE')
-"
+ls ~/kmp-migration-framework/orchestrator.py
 ```
 
-**IMPORTANT:** Replace `/YOUR/PROJECT/PATH/HERE` with your actual project path!
+**You should see:**
+```
+/Users/yourname/kmp-migration-framework/orchestrator.py
+```
+
+**If you see "No such file":**
+- The framework is not installed
+- Ask your instructor or clone from repository
+
+---
+
+## Step 2: Find Your Project Path
+
+### What You Need
+
+You need an **Android project**. It should look like this:
+
+```
+MyAndroidApp/
+├── app/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/          ← Your code is here
+│   │       │   └── com/
+│   │       │       └── example/
+│   │       │           ├── MainActivity.kt
+│   │       │           └── OtherFile.kt
+│   │       └── AndroidManifest.xml
+│   └── build.gradle
+├── settings.gradle
+└── build.gradle
+```
+
+### Find the Path
+
+**Method 1: If you know where your project is**
+
+1. Open terminal
+2. Type: `cd ` (with space after cd)
+3. Drag your project folder into terminal window
+4. Press Enter
+5. Type: `pwd`
+6. Press Enter
+7. **Copy the path it shows**
 
 **Example:**
 ```bash
+cd /Users/yourname/CodeBase/BookKeeper
+pwd
+# Output: /Users/yourname/CodeBase/BookKeeper
+# ← COPY THIS!
+```
+
+**Method 2: If you're not sure**
+
+Look for a folder that has:
+- `app/` folder inside
+- `build.gradle` file
+- `settings.gradle` file
+
+Common locations:
+- `~/AndroidStudioProjects/YourApp/`
+- `~/CodeBase/YourApp/`
+- `~/projects/YourApp/`
+
+---
+
+## Step 3: Run the Migration
+
+### Copy This Command
+
+```bash
 python3 -c "
 import sys
 sys.path.append('/Users/winson/kmp-migration-framework')
 from orchestrator import run_orchestrator
-run_orchestrator('/Users/winson/CodeBase/Offline/BookKeeper')
+run_orchestrator('YOUR_PATH_HERE')
 "
 ```
 
-### Step 4: Wait for Completion
+### Replace YOUR_PATH_HERE
 
-You will see output like this:
+Replace `YOUR_PATH_HERE` with the path you copied in Step 2.
+
+**Example:**
+
+If your path is `/Users/yourname/CodeBase/BookKeeper`
+
+Change the command to:
+
+```bash
+python3 -c "
+import sys
+sys.path.append('/Users/winson/kmp-migration-framework')
+from orchestrator import run_orchestrator
+run_orchestrator('/Users/yourname/CodeBase/BookKeeper')
+"
+```
+
+### Run the Command
+
+1. Copy the entire command (all 5 lines)
+2. Paste into terminal
+3. Press Enter
+
+### Wait for It to Finish
+
+You'll see output like this:
 
 ```
+============================================================
+INPUT VALIDATION
+============================================================
+
+✓ PASSED:
+  • Python Version: Python 3.11 ✓
+  • Framework Installation: All required files present ✓
+  • Project Path: /Users/yourname/CodeBase/BookKeeper ✓
+  • Project Structure: app/ directory ✓, 24 files ✓
+
+STATUS: ✓ ALL CHECKS PASSED - Ready to migrate!
+============================================================
+
 --- Phase 1: Comprehension ---
-SPEC.md generated successfully at /Users/winson/CodeBase/Offline/BookKeeper/SPEC.md
+SPEC.md generated successfully
 
 --- Phase 2: Batch Code Migration ---
 ✓ Found 24 source files
@@ -149,10 +201,32 @@ Migration report generated
 --- Pipeline Finished ---
 ```
 
-### Step 5: Check Your KMP Project
+**This takes 1-5 minutes depending on project size.**
+
+---
+
+## Step 4: Check Your KMP Project
+
+### Find the Migrated Project
+
+After migration finishes, you'll have a **new folder**:
+
+```
+YourOriginalProject/
+├── migrated_kmp_project/    ← NEW! Your KMP project is here
+│   ├── shared/
+│   │   └── src/
+│   │       └── commonMain/
+│   │           └── kotlin/   ← Your migrated code
+│   └── androidApp/
+├── SPEC.md
+└── COMPREHENSIVE_TEST_REPORT.md
+```
+
+### Check It
 
 ```bash
-cd /YOUR/PROJECT/PATH/HERE/migrated_kmp_project
+cd /Users/yourname/CodeBase/BookKeeper/migrated_kmp_project
 ls -la
 ```
 
@@ -163,11 +237,19 @@ androidApp/
 ARCHITECTURE.md
 ```
 
+### View Migrated Files
+
+```bash
+find shared/src/commonMain/kotlin -name "*.kt"
+```
+
+This shows all your migrated Kotlin files!
+
 ---
 
-## Quick Troubleshooting
+## Common Problems & Fixes
 
-### Error: "python3: command not found"
+### Problem 1: "python3: command not found"
 
 **Fix:**
 ```bash
@@ -175,76 +257,121 @@ ARCHITECTURE.md
 python --version
 ```
 
-Then use `python` instead of `python3` in the command.
+If that works, use `python` instead of `python3` in all commands.
 
-### Error: "No module named 'orchestrator'"
+If both fail:
+- Install Python from https://www.python.org/
 
-**Fix:** Make sure the path is correct:
+### Problem 2: "No module named 'orchestrator'"
 
+**Fix:** The framework path is wrong.
+
+Check if framework exists:
 ```bash
-# Check if framework exists
-ls /Users/winson/kmp-migration-framework
+ls ~/kmp-migration-framework/orchestrator.py
 ```
 
-If not found, update the path in the command to where you installed the framework.
+If it shows "No such file":
+- The framework is not at the expected location
+- Find where it is: `find ~ -name "orchestrator.py"`
+- Use the correct path in your command
 
-### Error: "SPEC.md not found"
-
-**Fix:** Run comprehension first:
-
-```bash
-python3 -c "
-import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
-from comprehension.analyze_project import analyze_android_project
-analyze_android_project('/YOUR/PROJECT/PATH/HERE')
-"
-```
-
-Then run the full migration again.
-
-### Error: "No such file or directory"
+### Problem 3: "Path does not exist"
 
 **Fix:** Your project path is wrong.
 
 1. Navigate to your project:
    ```bash
-   cd /your/project/path
+   cd /path/to/your/project
    ```
 
-2. Get the full path:
+2. Check it's the right place:
+   ```bash
+   ls
+   # Should show: app/ build.gradle settings.gradle
+   ```
+
+3. Get the correct path:
    ```bash
    pwd
    ```
 
-3. Copy that path into the migration command.
+4. Use that path in the migration command
+
+### Problem 4: "No LLM available"
+
+**This is OK!** It just means you're using mock mode.
+
+The migration will still work, but with placeholder code.
+
+**To use real AI (optional):**
+
+Option A - Ollama (free):
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull qwen2.5-coder:7b
+```
+
+Option B - Dashscope (paid):
+```bash
+export DASHSCOPE_API_KEY="sk-your-key-here"
+```
+
+### Problem 5: Migration takes too long
+
+**Normal time:** 1-5 minutes for typical projects
+
+**If it's stuck:**
+- Press `Ctrl + C` to stop
+- Check your project size (large projects take longer)
+- Try with a smaller project first
 
 ---
 
-## One-Line Command (Simplest)
+## Quick Reference
 
-If you want the absolute simplest command, copy this:
+### The One Command You Need
 
 ```bash
-cd /Users/winson/kmp-migration-framework && python3 -c "from orchestrator import run_orchestrator; run_orchestrator('/YOUR/PROJECT/PATH/HERE')"
+python3 -c "
+import sys
+sys.path.append('/Users/winson/kmp-migration-framework')
+from orchestrator import run_orchestrator
+run_orchestrator('/path/to/your/android/project')
+"
 ```
 
-**Just replace `/YOUR/PROJECT/PATH/HERE` with your actual path!**
+### What You Get
+
+| File | What It Is |
+|------|------------|
+| `migrated_kmp_project/` | **Your new KMP project!** |
+| `SPEC.md` | What was found in your project |
+| `COMPREHENSIVE_TEST_REPORT.md` | Quality score and issues |
+| `test_results.json` | Detailed results |
+
+### Where to Find Things
+
+| What | Where |
+|------|-------|
+| Your KMP code | `migrated_kmp_project/shared/src/commonMain/kotlin/` |
+| Android code | `migrated_kmp_project/androidApp/src/main/java/` |
+| Reports | Original project folder |
 
 ---
 
 ## Example: Complete Session
 
-Here's what a complete migration session looks like:
+Here's what a real migration looks like:
 
 ```bash
 # 1. Open terminal
 
 # 2. Check Python
 winson@MacBook ~ % python3 --version
-Python 3.9.16
+Python 3.11.6
 
-# 3. Find project path
+# 3. Find project
 winson@MacBook ~ % cd CodeBase/Offline/BookKeeper
 winson@MacBook BookKeeper % pwd
 /Users/winson/CodeBase/Offline/BookKeeper
@@ -258,6 +385,11 @@ run_orchestrator('/Users/winson/CodeBase/Offline/BookKeeper')
 "
 
 # 5. Wait for output...
+============================================================
+INPUT VALIDATION
+============================================================
+STATUS: ✓ ALL CHECKS PASSED - Ready to migrate!
+
 --- Phase 1: Comprehension ---
 SPEC.md generated successfully
 
@@ -278,20 +410,23 @@ SPEC.md  migrated_kmp_project/  COMPREHENSIVE_TEST_REPORT.md
 
 ## Summary
 
-| What | Where |
+| What | Value |
 |------|-------|
-| **Input** | Your Android project path (e.g., `/Users/name/Project`) |
-| **Command** | `python3 -c "from orchestrator import run_orchestrator; run_orchestrator('/path/to/project')"` |
-| **Output** | `migrated_kmp_project/` folder in your project directory |
+| **Input** | Path to your Android project |
+| **Command** | `python3 -c "from orchestrator import run_orchestrator; run_orchestrator('/path')"` |
+| **Output** | `migrated_kmp_project/` folder |
+| **Time** | 1-5 minutes |
+| **Difficulty** | Easy (just copy-paste) |
 
 ---
 
 ## Need Help?
 
-1. **Check your project path** - Most errors are wrong paths
-2. **Check Python version** - Must be 3.9 or higher
-3. **Check framework path** - Must be `/Users/winson/kmp-migration-framework`
+1. **Check Python:** `python3 --version` (need 3.9+)
+2. **Check Framework:** `ls ~/kmp-migration-framework/orchestrator.py`
+3. **Check Project:** `ls /your/project/path` (should show app/, build.gradle)
+4. **Validate:** Run the validation command before migration
 
 ---
 
-*Freshman Guide v1.0 - Just copy, paste, replace path, run!*
+*Freshman Guide v3.0 - Just 3 Steps: Check, Find Path, Run Command*

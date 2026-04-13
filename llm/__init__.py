@@ -25,15 +25,50 @@ Usage:
 
 from .invoker import LLMInvoker, LLMConfig, LLMProvider, LLMResponse
 from .prompts import PromptManager, PromptTemplate, PromptResult
+from .health_checker import (
+    check_llm_health,
+    get_recommended_invoker,
+    LLMHealthChecker,
+    LLMHealthStatus,
+    ProviderHealth,
+    HealthCheckResult
+)
+from .enhanced_invoker import (
+    EnhancedLLMInvoker,
+    LLMHealth,
+    LLMStatistics,
+    TokenUsage,
+    get_enhanced_invoker,
+    MODEL_PRICING
+)
 
 __all__ = [
+    # Invoker
     'LLMInvoker',
     'LLMConfig', 
     'LLMProvider',
     'LLMResponse',
+    'EnhancedLLMInvoker',
+    'get_enhanced_invoker',
+    
+    # Health & Stats
+    'LLMHealth',
+    'LLMStatistics',
+    'TokenUsage',
+    'MODEL_PRICING',
+    
+    # Prompts
     'PromptManager',
     'PromptTemplate',
     'PromptResult',
+    
+    # Health Checker
+    'check_llm_health',
+    'get_recommended_invoker',
+    'LLMHealthChecker',
+    'LLMHealthStatus',
+    'ProviderHealth',
+    'HealthCheckResult',
 ]
 
-__version__ = '1.0.0'
+__version__ = '2.0.0'

@@ -328,12 +328,12 @@ Generated: {datetime.now().isoformat()}
         
         if all_issues:
             report += f"## Issues ({len(all_issues)})\n\n"
-            for i, issue in enumerate(set(all_issues)[:10], 1):
+            for i, issue in enumerate(list(set(all_issues))[:10], 1):
                 report += f"{i}. {issue}\n"
         
         if all_recs:
             report += f"\n## Recommendations ({len(all_recs)})\n\n"
-            for i, rec in enumerate(set(all_recs)[:10], 1):
+            for i, rec in enumerate(list(set(all_recs))[:10], 1):
                 report += f"{i}. {rec}\n"
         
         return report

@@ -1,11 +1,37 @@
 import os
 import json
 
-def refine_skills(delegate_task):
+def refine_skills(delegate_task=None):
+    """
+    Refine skills based on failed evaluations.
+    
+    Args:
+        delegate_task: Can be:
+            - None (skip learning)
+            - Callable (old style, for backward compatibility)
+            - LLMInvoker object (new style)
+    """
     framework_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     kb_dir = os.path.join(framework_path, "knowledge_base")
     if not os.path.exists(kb_dir):
         print("Knowledge base not found.")
+        return
+
+    # Check if delegate_task is provided
+    if delegate_task is None:
+        print("No delegate_task provided - skipping learning phase")
+        return
+    
+    # Check if it's an LLMInvoker object (has 'invoke' method)
+    if hasattr(delegate_task, 'invoke'):
+        print("LLMInvoker detected - learning phase requires delegate_task callable")
+        print("Skipping learning phase (LLMInvoker doesn't support tool use yet)")
+        return
+    
+    # Check if it's callable
+    if not callable(delegate_task):
+        print(f"Invalid delegate_task type: {type(delegate_task)}")
+        print("Skipping learning phase")
         return
 
     for file_name in os.listdir(kb_dir):
@@ -47,4 +73,8 @@ def refine_skills(delegate_task):
                     - If your confidence is 3 or less, create a refinement suggestion markdown file for a human to review.
                 """
                 
-                delegate_task(goal=refiner_goal, toolsets=["skill_manage"])
+                try:
+                    delegate_task(goal=refiner_goal, toolsets=["skill_manage"])
+                except Exception as e:
+                    print(f"Warning: Failed to call delegate_task: {e}")
+                    print("Continuing with next file...")

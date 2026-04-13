@@ -1,0 +1,69 @@
+{
+  "id": "planner",
+  "name": "KMP Migration Planner",
+  "description": "Analyzes Android projects and creates detailed migration plans",
+  "prompts": {
+    "default": {
+      "id": "planner_default",
+      "name": "Default Planning Prompt",
+      "template": "You are an expert KMP architect. Analyze this Android project and create a migration plan.\n\n## Project Specification\n{{spec_content}}\n\n## Available Skills\n{{available_skills}}\n\n## Task\nCreate a step-by-step migration plan:\n1. Identify file groups by type (ViewModels, Activities, Repositories, etc.)\n2. Determine migration order (dependencies first)\n3. Identify KMP-compatible libraries\n4. Note platform-specific code that needs expect/actual\n\nOutput your plan as a structured list.",
+      "variables": ["spec_content", "available_skills"],
+      "version": "1.0.0",
+      "language": "en",
+      "tags": ["planning", "architecture", "kmp"]
+    },
+    "detailed": {
+      "id": "planner_detailed",
+      "name": "Detailed Planning Prompt",
+      "template": "You are a senior KMP developer with 10+ years of experience.\n\nAnalyze this Android project in detail:\n\n## Project Structure\n{{project_structure}}\n\n## Dependencies\n{{dependencies}}\n\n## Architecture Pattern\n{{architecture}}\n\n## Task\nCreate a comprehensive migration plan including:\n1. Module structure for KMP\n2. File-by-file migration order\n3. Library replacements (Android → KMP)\n4. expect/actual requirements\n5. Testing strategy\n6. Estimated effort per phase\n\nBe thorough and specific.",
+      "variables": ["project_structure", "dependencies", "architecture"],
+      "version": "1.0.0",
+      "language": "en",
+      "tags": ["planning", "detailed", "enterprise"]
+    }
+  },
+  "tools": {
+    "file_read": {
+      "tool_id": "file_read",
+      "capability": "file_read",
+      "required": true,
+      "fallback": null,
+      "config": {"max_file_size": 1048576}
+    },
+    "code_analysis": {
+      "tool_id": "code_analysis",
+      "capability": "code_analysis",
+      "required": false,
+      "fallback": "file_read",
+      "config": {}
+    }
+  },
+  "author": {
+    "name": "KMP Migration Team",
+    "email": "kmp-team@example.com",
+    "organization": "KMP Framework",
+    "version": "1.0.0",
+    "license": "MIT"
+  },
+  "input_schema": {
+    "type": "object",
+    "required": ["spec_content"],
+    "properties": {
+      "spec_content": {"type": "string"},
+      "available_skills": {"type": "string"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "plan": {"type": "array"},
+      "file_groups": {"type": "array"},
+      "dependencies": {"type": "object"}
+    }
+  },
+  "settings": {
+    "json_mode": false,
+    "temperature": 0.3,
+    "max_tokens": 4096
+  }
+}
