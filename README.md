@@ -1,432 +1,763 @@
-# KMP Migration Framework - Freshman Guide
+# KMP Migration Framework v3.1
 
-**No experience needed. Just follow these steps.**
+**Automated Android to Kotlin Multiplatform Migration**
 
----
-
-## What You'll Do (3 Steps)
-
-```
-Step 1: Check your computer has what we need (2 minutes)
-   ↓
-Step 2: Find your Android project path (1 minute)
-   ↓
-Step 3: Run one command (wait 1-5 minutes)
-   ↓
-Done! You have a KMP project!
-```
+Transform your Android projects into Kotlin Multiplatform (KMP) projects with a single command. This framework uses AI-powered code translation, comprehensive testing, and intelligent learning to ensure high-quality migrations.
 
 ---
 
-## Step 1: Check Your Computer
+## 📖 Table of Contents
 
-### Open Terminal
+1. [Introduction](#introduction)
+2. [Technology Stack](#technology-stack)
+3. [Architecture](#architecture)
+4. [Requirements](#requirements)
+5. [Installation](#installation)
+6. [Quick Start (3 Steps)](#quick-start-3-steps)
+7. [Configuration](#configuration)
+8. [Input Requirements](#input-requirements)
+9. [Files & Scripts](#files--scripts)
+10. [Migration Process](#migration-process)
+11. [Output](#output)
+12. [Troubleshooting](#troubleshooting)
+13. [Examples](#examples)
 
-**Mac:** Press `Command + Space`, type "Terminal", press Enter
+---
 
-**Windows:** Press `Windows + R`, type "cmd", press Enter
+## Introduction
 
-**Linux:** Press `Ctrl + Alt + T`
+### What is This?
 
-### Check Python
+The **KMP Migration Framework** automatically converts Android applications to Kotlin Multiplatform (KMP) projects. It analyzes your Android code, migrates it to KMP with shared code across platforms (Android, iOS, Desktop), and verifies the migration with comprehensive testing.
 
-Copy and paste this into terminal:
+### Why KMP?
+
+Kotlin Multiplatform allows you to:
+- ✅ **Share business logic** across Android, iOS, Web, and Desktop
+- ✅ **Reduce code duplication** by 40-60%
+- ✅ **Maintain single source of truth** for business logic
+- ✅ **Platform-specific UI** where it matters
+- ✅ **Gradual adoption** - migrate incrementally
+
+### What Does This Framework Do?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    KMP MIGRATION                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  INPUT: Android Project                                      │
+│  ├── Java/Kotlin source files                               │
+│  ├── Gradle build files                                     │
+│  └── Android-specific code                                  │
+│                                                              │
+│  PROCESS: AI-Powered Migration                               │
+│  ├── Analyze architecture & dependencies                    │
+│  ├── Generate KMP-compatible code                           │
+│  ├── Create shared & platform modules                       │
+│  └── Verify with Gradle build                               │
+│                                                              │
+│  OUTPUT: KMP Project                                         │
+│  ├── shared/ (common code)                                  │
+│  ├── androidApp/ (Android UI)                               │
+│  ├── iosApp/ (iOS UI placeholder)                           │
+│  └── Complete Gradle build system                           │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Multi-Agent System** | 5 specialized AI agents (Explorer, Planner, Generator, Evaluator, Refiner) |
+| **Batch Migration** | Process files in groups (3-5x faster than file-by-file) |
+| **Checkpoint/Resume** | Recover from failures without starting over |
+| **Skills Hub** | 7+ pre-built migration skills (Retrofit→Ktor, Room→SQLDelight, etc.) |
+| **Comprehensive Testing** | 4-method verification (Metrics, LLM, Multi-Modal, Gradle) |
+| **Learning Loop** | Improves from every migration |
+| **Gradle Build Script** | Self-contained bash script for building |
+
+---
+
+## Technology Stack
+
+### Core Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Python** | 3.9+ | Framework runtime |
+| **Kotlin** | 1.9.20 | Target language |
+| **Gradle** | 8.4 | Build system |
+| **Bash** | 4.0+ | Build scripts |
+
+### AI/LLM Support
+
+| Provider | Models | Cost | Status |
+|----------|--------|------|--------|
+| **Ollama** | qwen2.5-coder, llama | Free (local) | ✓ Recommended |
+| **Dashscope** | qwen-turbo, qwen-max | Paid | ✓ Supported |
+| **OpenAI** | gpt-3.5, gpt-4 | Paid | ✓ Supported |
+| **Anthropic** | claude-3-haiku/sonnet/opus | Paid | ✓ Supported |
+| **Mock Mode** | N/A | Free | ✓ Works without LLM |
+
+### KMP Libraries
+
+| Library | Version | Purpose |
+|---------|---------|---------|
+| **Ktor** | 2.3.6 | Networking (replaces Retrofit) |
+| **SQLDelight** | 2.0.0 | Database (replaces Room) |
+| **Kotlinx Coroutines** | 1.7.3 | Async (replaces LiveData/ViewModel) |
+| **Kotlinx Serialization** | 1.6.0 | JSON (replaces Gson/Moshi) |
+| **Koin** | 3.5.0 | Dependency Injection |
+
+### Framework Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    KMP MIGRATION FRAMEWORK                       │
+│                         v3.1.0                                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  CORE PILLARS                                                    │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │   HARNESS   │  │    MEMORY   │  │    TOOLS    │             │
+│  │  - Checkpoint│  │  - Patterns │  │  - Registry │             │
+│  │  - Parallel  │  │  - History  │  │  - Fallback │             │
+│  │  - Recovery  │  │  - Lessons  │  │  - Health   │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                  │
+│  AGENTS (Prompt/Tools/Author Separated)                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐        │
+│  │ EXPLORER │  │ PLANNER  │  │GENERATOR │  │EVALUATOR │        │
+│  │ +REFINER │  │          │  │          │  │          │        │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘        │
+│                                                                  │
+│  TESTING (4-Method Verification)                                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │  METRICS    │  │  LLM JUDGE  │  │  MULTI-MODAL│             │
+│  │ - Coverage  │  │ - 10 Scores │  │ - UI Analysis│             │
+│  │ - Complexity│  │ - Review    │  │ - A11y      │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘             │
+│  ┌─────────────────────────────────────────────────────┐        │
+│  │  GRADLE BUILD (bash script)                         │        │
+│  │  - Auto-generates build files                       │        │
+│  │  - Runs: gradle compileKotlinMetadata               │        │
+│  │  - Reports errors with suggestions                  │        │
+│  └─────────────────────────────────────────────────────┘        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Requirements
+
+### Minimum Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| **OS** | Linux/macOS/Windows | Linux/macOS |
+| **Python** | 3.9 | 3.11+ |
+| **Java** | 11 | 17+ |
+| **RAM** | 4GB | 8GB+ |
+| **Disk** | 1GB free | 5GB+ free |
+
+### Check Your System
 
 ```bash
-python3 --version
+# Check Python
+python3 --version  # Should be 3.9 or higher
+
+# Check Java
+java -version  # Should be 11 or higher
+
+# Check disk space
+df -h ~/  # Should have 1GB+ free
 ```
 
-**You should see:**
-```
-Python 3.9.x  (or higher like 3.10, 3.11, 3.12)
-```
+### Install Missing Dependencies
 
-**If you see an error** like "command not found":
-- Go to https://www.python.org/
-- Download and install Python
-- Come back and try again
-
-### Check Framework
-
-Copy and paste this:
-
+**Ubuntu/Debian:**
 ```bash
-ls ~/kmp-migration-framework/orchestrator.py
+sudo apt update
+sudo apt install python3 python3-pip openjdk-11-jdk git curl
 ```
 
-**You should see:**
-```
-/Users/yourname/kmp-migration-framework/orchestrator.py
+**macOS:**
+```bash
+brew install python3 openjdk@11 git curl
 ```
 
-**If you see "No such file":**
-- The framework is not installed
-- Ask your instructor or clone from repository
+**Windows:**
+```powershell
+# Install Python from https://www.python.org/
+# Install Java from https://adoptium.net/
+# Install Git from https://git-scm.com/
+```
 
 ---
 
-## Step 2: Find Your Project Path
+## Installation
 
-### What You Need
+### Step 1: Clone or Download Framework
 
-You need an **Android project**. It should look like this:
+```bash
+# Clone from repository (if available)
+git clone https://github.com/your-repo/kmp-migration-framework.git
+cd kmp-migration-framework
+
+# OR download and extract
+# Download ZIP and extract to ~/kmp-migration-framework
+```
+
+### Step 2: Install Python Dependencies
+
+```bash
+cd ~/kmp-migration-framework
+pip3 install PyYAML
+```
+
+### Step 3: (Optional) Set Up LLM
+
+**Option A: Ollama (Free, Local) - RECOMMENDED**
+```bash
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Download model
+ollama pull qwen2.5-coder:7b
+
+# Start server (usually auto-starts)
+ollama serve
+```
+
+**Option B: Dashscope (Paid, Cloud)**
+```bash
+# Get API key from https://dashscope.aliyun.com/
+export DASHSCOPE_API_KEY="sk-your-key-here"
+```
+
+**Option C: Mock Mode (No LLM)**
+```bash
+# No setup needed - works out of the box
+# Code will be migrated with mock responses
+```
+
+### Step 4: Verify Installation
+
+```bash
+python3 -c "
+import sys
+sys.path.append('~/kmp-migration-framework')
+from orchestrator import run_orchestrator
+print('✓ Framework installed successfully')
+"
+```
+
+---
+
+## Quick Start (3 Steps)
+
+### Step 1: Prepare Your Android Project
+
+Your project should have this structure:
 
 ```
 MyAndroidApp/
 ├── app/
 │   ├── src/
-│   │   └── main/
-│   │       ├── java/          ← Your code is here
-│   │       │   └── com/
-│   │       │       └── example/
-│   │       │           ├── MainActivity.kt
-│   │       │           └── OtherFile.kt
-│   │       └── AndroidManifest.xml
-│   └── build.gradle
-├── settings.gradle
-└── build.gradle
+│   │   ├── main/
+│   │   │   ├── java/ or kotlin/    ← Your code here
+│   │   │   │   └── com/example/
+│   │   │   │       ├── MainActivity.kt
+│   │   │   │       └── OtherFile.kt
+│   │   │   └── AndroidManifest.xml
+│   │   ├── test/                   ← Unit tests (optional)
+│   │   └── androidTest/            ← Instrumented tests (optional)
+│   └── build.gradle                ← Required
+├── settings.gradle                  ← Required
+└── build.gradle                     ← Required
 ```
 
-### Find the Path
-
-**Method 1: If you know where your project is**
-
-1. Open terminal
-2. Type: `cd ` (with space after cd)
-3. Drag your project folder into terminal window
-4. Press Enter
-5. Type: `pwd`
-6. Press Enter
-7. **Copy the path it shows**
-
-**Example:**
+**Find your project path:**
 ```bash
-cd /Users/yourname/CodeBase/BookKeeper
+cd /path/to/your/AndroidProject
 pwd
-# Output: /Users/yourname/CodeBase/BookKeeper
-# ← COPY THIS!
+# Copy this path (e.g., /Users/yourname/CodeBase/MyApp)
 ```
 
-**Method 2: If you're not sure**
+### Step 2: Run Migration
 
-Look for a folder that has:
-- `app/` folder inside
-- `build.gradle` file
-- `settings.gradle` file
-
-Common locations:
-- `~/AndroidStudioProjects/YourApp/`
-- `~/CodeBase/YourApp/`
-- `~/projects/YourApp/`
-
----
-
-## Step 3: Run the Migration
-
-### Copy This Command
-
+**Basic (Mock Mode):**
 ```bash
 python3 -c "
 import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
-from orchestrator import run_orchestrator
-run_orchestrator('YOUR_PATH_HERE')
-"
-```
-
-### Replace YOUR_PATH_HERE
-
-Replace `YOUR_PATH_HERE` with the path you copied in Step 2.
-
-**Example:**
-
-If your path is `/Users/yourname/CodeBase/BookKeeper`
-
-Change the command to:
-
-```bash
-python3 -c "
-import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
-from orchestrator import run_orchestrator
-run_orchestrator('/Users/yourname/CodeBase/BookKeeper')
-"
-```
-
-### Run the Command
-
-1. Copy the entire command (all 5 lines)
-2. Paste into terminal
-3. Press Enter
-
-### Wait for It to Finish
-
-You'll see output like this:
-
-```
-============================================================
-INPUT VALIDATION
-============================================================
-
-✓ PASSED:
-  • Python Version: Python 3.11 ✓
-  • Framework Installation: All required files present ✓
-  • Project Path: /Users/yourname/CodeBase/BookKeeper ✓
-  • Project Structure: app/ directory ✓, 24 files ✓
-
-STATUS: ✓ ALL CHECKS PASSED - Ready to migrate!
-============================================================
-
---- Phase 1: Comprehension ---
-SPEC.md generated successfully
-
---- Phase 2: Batch Code Migration ---
-✓ Found 24 source files
-✓ Identified 7 file groups
-✓ Migrated 24 files in 7 batches
-
---- Phase 3: Test Migration ---
-Test migration plan generated
-
---- Phase 4: Comprehensive Evaluation ---
-Overall Score: 75.3/100
-
---- Phase 5: Learning ---
-
---- Phase 6: Delivery ---
-
---- Phase 7: Reporting ---
-Migration report generated
-
---- Pipeline Finished ---
-```
-
-**This takes 1-5 minutes depending on project size.**
-
----
-
-## Step 4: Check Your KMP Project
-
-### Find the Migrated Project
-
-After migration finishes, you'll have a **new folder**:
-
-```
-YourOriginalProject/
-├── migrated_kmp_project/    ← NEW! Your KMP project is here
-│   ├── shared/
-│   │   └── src/
-│   │       └── commonMain/
-│   │           └── kotlin/   ← Your migrated code
-│   └── androidApp/
-├── SPEC.md
-└── COMPREHENSIVE_TEST_REPORT.md
-```
-
-### Check It
-
-```bash
-cd /Users/yourname/CodeBase/BookKeeper/migrated_kmp_project
-ls -la
-```
-
-You should see:
-```
-shared/
-androidApp/
-ARCHITECTURE.md
-```
-
-### View Migrated Files
-
-```bash
-find shared/src/commonMain/kotlin -name "*.kt"
-```
-
-This shows all your migrated Kotlin files!
-
----
-
-## Common Problems & Fixes
-
-### Problem 1: "python3: command not found"
-
-**Fix:**
-```bash
-# Try python instead
-python --version
-```
-
-If that works, use `python` instead of `python3` in all commands.
-
-If both fail:
-- Install Python from https://www.python.org/
-
-### Problem 2: "No module named 'orchestrator'"
-
-**Fix:** The framework path is wrong.
-
-Check if framework exists:
-```bash
-ls ~/kmp-migration-framework/orchestrator.py
-```
-
-If it shows "No such file":
-- The framework is not at the expected location
-- Find where it is: `find ~ -name "orchestrator.py"`
-- Use the correct path in your command
-
-### Problem 3: "Path does not exist"
-
-**Fix:** Your project path is wrong.
-
-1. Navigate to your project:
-   ```bash
-   cd /path/to/your/project
-   ```
-
-2. Check it's the right place:
-   ```bash
-   ls
-   # Should show: app/ build.gradle settings.gradle
-   ```
-
-3. Get the correct path:
-   ```bash
-   pwd
-   ```
-
-4. Use that path in the migration command
-
-### Problem 4: "No LLM available"
-
-**This is OK!** It just means you're using mock mode.
-
-The migration will still work, but with placeholder code.
-
-**To use real AI (optional):**
-
-Option A - Ollama (free):
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull qwen2.5-coder:7b
-```
-
-Option B - Dashscope (paid):
-```bash
-export DASHSCOPE_API_KEY="sk-your-key-here"
-```
-
-### Problem 5: Migration takes too long
-
-**Normal time:** 1-5 minutes for typical projects
-
-**If it's stuck:**
-- Press `Ctrl + C` to stop
-- Check your project size (large projects take longer)
-- Try with a smaller project first
-
----
-
-## Quick Reference
-
-### The One Command You Need
-
-```bash
-python3 -c "
-import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
+sys.path.append('~/kmp-migration-framework')
 from orchestrator import run_orchestrator
 run_orchestrator('/path/to/your/android/project')
 "
 ```
 
-### What You Get
+**With LLM (Better Quality):**
+```bash
+python3 -c "
+import sys
+sys.path.append('~/kmp-migration-framework')
+from orchestrator import run_orchestrator
+from llm import get_enhanced_invoker
 
-| File | What It Is |
-|------|------------|
-| `migrated_kmp_project/` | **Your new KMP project!** |
-| `SPEC.md` | What was found in your project |
-| `COMPREHENSIVE_TEST_REPORT.md` | Quality score and issues |
-| `test_results.json` | Detailed results |
+invoker = get_enhanced_invoker('ollama', 'qwen2.5-coder:7b')
+run_orchestrator('/path/to/your/android/project', delegate_task_func=invoker)
+"
+```
 
-### Where to Find Things
+### Step 3: Check Results
 
-| What | Where |
-|------|-------|
-| Your KMP code | `migrated_kmp_project/shared/src/commonMain/kotlin/` |
-| Android code | `migrated_kmp_project/androidApp/src/main/java/` |
-| Reports | Original project folder |
+After migration completes (1-5 minutes), check:
+
+```bash
+cd /path/to/your/android/project
+ls -la
+```
+
+You should see:
+```
+migrated_kmp_project/     ← Your new KMP project
+SPEC.md                    ← Migration specification
+COMPREHENSIVE_TEST_REPORT.md  ← Quality report
+test_results.json         ← Detailed results
+```
+
+**View migrated code:**
+```bash
+cd migrated_kmp_project/shared/src/commonMain/kotlin
+ls -la
+```
+
+**That's it! Your KMP project is ready!** 🎉
 
 ---
 
-## Example: Complete Session
+## Configuration
 
-Here's what a real migration looks like:
+### Configuration File
+
+Create `~/.hermes/kmp-migration/config.json`:
+
+```json
+{
+  "project_path": "/path/to/default/project",
+  "llm": {
+    "provider": "ollama",
+    "model": "qwen2.5-coder:7b",
+    "base_url": "http://localhost:11434"
+  },
+  "gradle": {
+    "version": "8.4",
+    "kotlin_version": "1.9.20",
+    "min_sdk": 21,
+    "target_sdk": 34
+  },
+  "migration": {
+    "dry_run": true,
+    "enable_testing": true,
+    "enable_learning": true
+  }
+}
+```
+
+### Command Line Options
+
+```python
+from orchestrator import run_orchestrator
+
+run_orchestrator(
+    project_path='/path/to/project',
+    delegate_task_func=invoker,  # LLM invoker or None for mock
+    dry_run=True,                 # Don't create git commits
+    check_health=True             # Check LLM health first
+)
+```
+
+### Environment Variables
 
 ```bash
-# 1. Open terminal
+# LLM API Keys
+export DASHSCOPE_API_KEY="sk-..."
+export OPENAI_API_KEY="sk-..."
+export ANTHROPIC_API_KEY="sk-..."
 
-# 2. Check Python
-winson@MacBook ~ % python3 --version
-Python 3.11.6
+# Ollama
+export OLLAMA_HOST="localhost:11434"
 
-# 3. Find project
-winson@MacBook ~ % cd CodeBase/Offline/BookKeeper
-winson@MacBook BookKeeper % pwd
-/Users/winson/CodeBase/Offline/BookKeeper
-
-# 4. Run migration (COPY THIS, REPLACE PATH)
-winson@MacBook BookKeeper % python3 -c "
-import sys
-sys.path.append('/Users/winson/kmp-migration-framework')
-from orchestrator import run_orchestrator
-run_orchestrator('/Users/winson/CodeBase/Offline/BookKeeper')
-"
-
-# 5. Wait for output...
-============================================================
-INPUT VALIDATION
-============================================================
-STATUS: ✓ ALL CHECKS PASSED - Ready to migrate!
-
---- Phase 1: Comprehension ---
-SPEC.md generated successfully
-
---- Phase 2: Batch Code Migration ---
-✓ Found 24 source files
-✓ Migrated 24 files in 7 batches
-
---- Pipeline Finished ---
-
-# 6. Check results
-winson@MacBook BookKeeper % ls
-SPEC.md  migrated_kmp_project/  COMPREHENSIVE_TEST_REPORT.md
-
-# 7. Done! Your KMP project is in migrated_kmp_project/
+# Framework
+export KMP_MIGRATION_CONFIG="~/.hermes/kmp-migration/config.json"
 ```
 
 ---
 
-## Summary
+## Input Requirements
 
-| What | Value |
-|------|-------|
-| **Input** | Path to your Android project |
-| **Command** | `python3 -c "from orchestrator import run_orchestrator; run_orchestrator('/path')"` |
-| **Output** | `migrated_kmp_project/` folder |
-| **Time** | 1-5 minutes |
-| **Difficulty** | Easy (just copy-paste) |
+### Required Input
+
+| Input | Format | How to Get | Validation |
+|-------|--------|------------|------------|
+| **Project Path** | Absolute path | `cd /path && pwd` | Must exist, must be Android project |
+| **Python 3.9+** | Version | `python3 --version` | Checked automatically |
+| **Framework** | Directory | Clone/download | Checked automatically |
+
+### Optional Input
+
+| Input | Default | How to Set |
+|-------|---------|------------|
+| **LLM Provider** | Mock mode | Config file or env var |
+| **API Key** | None | Environment variable |
+| **Output Path** | `migrated_kmp_project/` | Config file |
+| **Gradle Version** | 8.4 | Config file |
+| **Kotlin Version** | 1.9.20 | Config file |
+
+### Validate Before Migration
+
+```bash
+python3 -c "
+import sys
+sys.path.append('~/kmp-migration-framework')
+from core import validate_inputs
+
+if validate_inputs('/path/to/project'):
+    print('✓ All checks passed - ready to migrate')
+else:
+    print('✗ Fix errors before migrating')
+"
+```
 
 ---
 
-## Need Help?
+## Files & Scripts
 
-1. **Check Python:** `python3 --version` (need 3.9+)
-2. **Check Framework:** `ls ~/kmp-migration-framework/orchestrator.py`
-3. **Check Project:** `ls /your/project/path` (should show app/, build.gradle)
-4. **Validate:** Run the validation command before migration
+### Framework Structure
+
+```
+~/kmp-migration-framework/
+├── core/                      # Core modules
+│   ├── harness.py            # Checkpoint/Resume system
+│   ├── memory.py             # Cross-project learning
+│   ├── tool_registry.py      # Tool management
+│   ├── state.py              # Session state
+│   ├── hooks.py              # Side-effect management
+│   └── config.py             # Configuration
+├── agents/                    # AI agents
+│   ├── base.py               # Agent base class
+│   └── planner.json          # Planner agent config
+├── llm/                       # LLM integration
+│   ├── invoker.py            # LLM invoker
+│   ├── enhanced_invoker.py   # Health monitoring + stats
+│   ├── health_checker.py     # Provider health checks
+│   └── prompts.py            # Prompt management
+├── skills/                    # Migration skills
+│   └── hub.py                # Skills registry (7+ skills)
+├── comprehension/             # Project analysis
+│   └── spec_generator.py     # SPEC.md generator (PRD+DESIGN+PLAN)
+├── generation/                # Code generation
+│   └── batch_migration.py    # Batch migration system
+├── testing/                   # Testing & verification
+│   ├── metrics.py            # Traditional metrics
+│   ├── llm_judge.py          # LLM-as-a-Judge
+│   ├── multimodal.py         # Multi-modal evaluation
+│   ├── gradle_verifier.py    # Gradle build verification
+│   ├── gradle_build_script.py# Gradle script generator
+│   └── build_kmp.sh          # Bash build script
+├── learning/                  # Learning system
+│   └── refine_skills.py      # Skill refinement
+├── orchestrator.py            # Main pipeline runner
+└── README.md                  # This file
+```
+
+### Key Scripts
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `orchestrator.py` | Main migration pipeline | `run_orchestrator('/path')` |
+| `testing/build_kmp.sh` | Build KMP projects | `./build_kmp.sh /path` |
+| `core/config.py` | Configuration management | `python -m core.config --wizard` |
+
+### Generated Files
+
+After migration, each project has:
+
+| File | Purpose |
+|------|---------|
+| `SPEC.md` | PRD + DESIGN + PLAN (comprehensive specification) |
+| `migrated_kmp_project/` | Complete KMP project |
+| `COMPREHENSIVE_TEST_REPORT.md` | Quality report with scores |
+| `test_results.json` | Machine-readable results |
+| `MIGRATION_REPORT.md` | Migration summary |
 
 ---
 
-*Freshman Guide v3.0 - Just 3 Steps: Check, Find Path, Run Command*
+## Migration Process
+
+### 7-Phase Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 1: COMPREHENSION                                      │
+├─────────────────────────────────────────────────────────────┤
+│ • Analyze project structure                                 │
+│ • Detect architecture (MVVM, MVI, Clean)                    │
+│ • Identify dependencies                                     │
+│ • Generate SPEC.md (PRD + DESIGN + PLAN)                    │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 2: BATCH MIGRATION                                    │
+├─────────────────────────────────────────────────────────────┤
+│ • Group files by type (ViewModel, Activity, etc.)           │
+│ • Migrate in batches (3-5x faster)                          │
+│ • Apply skills (Retrofit→Ktor, Room→SQLDelight)             │
+│ • Generate shared utilities                                 │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 3: TEST MIGRATION                                     │
+├─────────────────────────────────────────────────────────────┤
+│ • Migrate unit tests                                        │
+│ • Migrate instrumented tests                                │
+│ • Create test plan                                          │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 3.5: GENERATE GRADLE BUILD                            │
+├─────────────────────────────────────────────────────────────┤
+│ • Generate settings.gradle.kts                              │
+│ • Generate build.gradle.kts                                 │
+│ • Generate shared/build.gradle.kts                          │
+│ • Generate gradle.properties                                │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 4: COMPREHENSIVE EVALUATION                           │
+├─────────────────────────────────────────────────────────────┤
+│ [1/4] Traditional Metrics (compilation, coverage)           │
+│ [2/4] LLM-as-a-Judge (10-criteria scoring)                  │
+│ [3/4] Multi-Modal UI (accessibility, cross-platform)        │
+│ [4/4] Gradle Build Verification (runs build_kmp.sh)         │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 5: LEARNING                                           │
+├─────────────────────────────────────────────────────────────┤
+│ • Analyze failures                                          │
+│ • Update skills                                             │
+│ • Record patterns                                           │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 6: DELIVERY                                           │
+├─────────────────────────────────────────────────────────────┤
+│ • Create git branch                                         │
+│ • Commit changes                                            │
+│ • Create PR (optional)                                      │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ PHASE 7: REPORTING                                          │
+├─────────────────────────────────────────────────────────────┤
+│ • Generate final report                                     │
+│ • Export results                                            │
+│ • Save state                                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Timeline
+
+| Project Size | Files | Time (Mock) | Time (LLM) |
+|--------------|-------|-------------|------------|
+| Small | <20 | <1 min | 5-10 min |
+| Medium | 20-50 | 1-2 min | 10-20 min |
+| Large | 50-100 | 2-5 min | 20-40 min |
+| Enterprise | 100+ | 5-10 min | 40-60 min |
+
+---
+
+## Output
+
+### Migrated Project Structure
+
+```
+migrated_kmp_project/
+├── shared/                          # Shared code (all platforms)
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── commonMain/kotlin/       # Common code
+│       │   ├── viewmodel/
+│       │   ├── data/
+│       │   └── model/
+│       ├── androidMain/kotlin/      # Android-specific
+│       ├── iosMain/kotlin/          # iOS-specific
+│       └── desktopMain/kotlin/      # Desktop-specific
+├── androidApp/                      # Android application
+│   ├── build.gradle.kts
+│   └── src/main/
+│       ├── java/
+│       ├── res/
+│       └── AndroidManifest.xml
+├── iosApp/                          # iOS application (placeholder)
+│   └── README.md
+├── gradle/                          # Gradle wrapper
+├── gradlew                          # Gradle wrapper script
+├── settings.gradle.kts
+└── build.gradle.kts
+```
+
+### Quality Scores
+
+| Score Range | Status | Action |
+|-------------|--------|--------|
+| 80-100 | ✅ Excellent | Ready for production |
+| 60-79 | ⚠️ Good | Minor fixes needed |
+| 40-59 | ⚡ Needs Work | Significant improvements |
+| 0-39 | ❌ Critical | Major refactoring required |
+
+### Reports
+
+**SPEC.md** - Comprehensive specification:
+- PRD (Features, Models, Screens, User Flows)
+- DESIGN (Architecture, Layers, KMP Structure)
+- PLAN (Phases, Timeline, Risks)
+
+**COMPREHENSIVE_TEST_REPORT.md** - Quality report:
+- Traditional metrics
+- LLM-as-a-Judge scores
+- Multi-modal evaluation
+- Gradle build results
+
+**test_results.json** - Machine-readable:
+```json
+{
+  "overall_score": 75.3,
+  "gradle_build": {
+    "success": true,
+    "duration_seconds": 45.2
+  },
+  "llm_judge": {...},
+  "traditional_metrics": {...}
+}
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `python3: command not found` | Python not installed | Install from python.org |
+| `No module named 'orchestrator'` | Wrong path | Use absolute path to framework |
+| `SPEC.md not found` | Comprehension failed | Check project structure |
+| `Gradle wrapper not found` | No gradlew | Script auto-downloads it |
+| `Build timed out` | Large project | Increase `--timeout` |
+| `Unresolved reference` | Missing dependency | Check build.gradle.kts |
+
+### Get Help
+
+```bash
+# Validate project
+python3 -c "
+from core import validate_inputs
+validate_inputs('/path/to/project')
+"
+
+# Check LLM health
+python3 -c "
+from llm import check_llm_health
+check_llm_health()
+"
+
+# View build log
+cat /tmp/kmp_build.log
+```
+
+---
+
+## Examples
+
+### Example 1: Simple App (DiceRoller)
+
+**Input:**
+```
+DiceRoller/
+├── app/src/main/java/com/example/diceroller/
+│   ├── MainActivity.kt
+│   └── Dice.kt
+└── build.gradle
+```
+
+**Command:**
+```bash
+python3 -c "
+from orchestrator import run_orchestrator
+run_orchestrator('/Users/yourname/examples/DiceRoller')
+"
+```
+
+**Output:**
+```
+✓ Migrated 3 files in 2 batches
+✓ Gradle build PASSED (45.2s)
+✓ Overall Score: 85.3/100
+```
+
+### Example 2: Complex App (BookKeeper)
+
+**Input:**
+```
+BookKeeper/
+├── app/src/main/java/com/example/bookkeeper/
+│   ├── MainActivity.kt
+│   ├── BookViewModel.kt
+│   ├── BookRepository.kt
+│   ├── BookDAO.kt
+│   └── Book.kt (@Entity)
+└── build.gradle (Room, Retrofit, ViewModel)
+```
+
+**Command:**
+```bash
+python3 -c "
+from orchestrator import run_orchestrator
+from llm import get_enhanced_invoker
+
+invoker = get_enhanced_invoker('ollama', 'qwen2.5-coder:7b')
+run_orchestrator('/path/to/BookKeeper', delegate_task_func=invoker)
+"
+```
+
+**Output:**
+```
+✓ SPEC.md generated (PRD + DESIGN + PLAN)
+✓ Migrated 12 files in 5 batches
+✓ Skills applied: Room→SQLDelight, ViewModel→Flow
+✓ Gradle build PASSED (78.5s)
+✓ Overall Score: 72.1/100
+```
+
+---
+
+## Additional Resources
+
+| Document | Purpose |
+|----------|---------|
+| `README.md` | This guide |
+| `BUILD_SCRIPT_GUIDE.md` | Bash build script documentation |
+| `AGENTS_AND_LLM_REFINEMENT.md` | Agent & LLM system |
+| `FRAMEWORK_REFINEMENT_V3.md` | Harness/Memory/Tools |
+| `MIGRATE_A2K_SESSION_REVIEW.md` | Complete session review |
+
+---
+
+**KMP Migration Framework v3.1** - Production Ready
+
+*Last Updated: 2026-04-13*

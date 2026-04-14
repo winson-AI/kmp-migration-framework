@@ -27,6 +27,7 @@ from delivery_agent import delivery_agent
 from supervisor_agent import supervisor_agent
 from reporter_agent import reporter_agent
 from llm.health_checker import check_llm_health, get_recommended_invoker
+from testing.gradle_build_script import generate_gradle_build, BuildConfig, GradleVersions
 
 class KmpMigrationPipeline:
     def __init__(self, project_path, delegate_task_func=None, dry_run=True):
@@ -62,9 +63,31 @@ class KmpMigrationPipeline:
         print("\n--- Phase 3: Test Migration ---")
         migrate_tests(self.project_path)
 
-        # Phase 4: Comprehensive Evaluation (NEW)
+        # Phase 3.5: Generate Gradle Build Scripts (NEW)
+        print("\n--- Phase 3.5: Generate Gradle Build Scripts ---")
+        migrated_path = os.path.join(self.project_path, 'migrated_kmp_project')
+        if os.path.exists(migrated_path):
+            # Create build configuration
+            build_config = BuildConfig(
+                project_name=os.path.basename(self.project_path),
+                group_id='com.example',
+                versions=GradleVersions(
+                    gradle='8.4',
+                    kotlin='1.9.20',
+                    kotlinx_coroutines='1.7.3',
+                    ktor='2.3.6',
+                    min_sdk=21,
+                    target_sdk=34
+                )
+            )
+            generate_gradle_build(migrated_path, build_config)
+            print(f"  ✓ Gradle build scripts generated")
+        else:
+            print(f"  ⚠ Migrated project not found, skipping Gradle generation")
+
+        # Phase 4: Comprehensive Evaluation
         print("\n--- Phase 4: Comprehensive Evaluation ---")
-        print("Includes: Traditional Metrics + LLM-as-a-Judge + Multi-Modal")
+        print("Includes: Traditional Metrics + LLM-as-a-Judge + Multi-Modal + Gradle Build")
         evaluate_code(self.project_path, self.delegate_task, None)
 
         # Phase 5: Learning

@@ -7,10 +7,12 @@ try:
     from .metrics import TestingMetrics
     from .llm_judge import LLMJudge
     from .multimodal import MultiModalEvaluator
+    from .gradle_verifier import GradleVerifier, verify_gradle_build
 except ImportError:
     from metrics import TestingMetrics
     from llm_judge import LLMJudge
     from multimodal import MultiModalEvaluator
+    from gradle_verifier import GradleVerifier, verify_gradle_build
 
 class ComprehensiveTesting:
     """Orchestrates all testing and evaluation methods."""
@@ -53,7 +55,7 @@ class ComprehensiveTesting:
         self.results['llm_judge'] = self.llm_judge.evaluate_all(migrated_files)
         
         # Phase 3: Multi-Modal Evaluation
-        print("\n[3/3] Running Multi-Modal UI Evaluation...")
+        print("\n[3/4] Running Multi-Modal UI Evaluation...")
         compose_files = self._find_compose_files()
         ui_evaluation = self.multimodal_eval.evaluate_ui_components(compose_files)
         platform_evaluation = self.multimodal_eval.evaluate_cross_platform_ui(compose_files)
@@ -61,6 +63,18 @@ class ComprehensiveTesting:
             'ui': ui_evaluation,
             'platform': platform_evaluation
         }
+        
+        # Phase 4: Gradle Build Verification (NEW)
+        print("\n[4/4] Running Gradle Build Verification...")
+        gradle_result = verify_gradle_build(self.migrated_project_path, timeout=300)
+        self.results['gradle_build'] = gradle_result.to_dict()
+        
+        if gradle_result.success:
+            print("  ✓ Gradle build PASSED")
+        else:
+            print(f"  ✗ Gradle build FAILED: {gradle_result.status.value}")
+            if gradle_result.errors:
+                print(f"  Errors: {len(gradle_result.errors)}")
         
         # Calculate overall score
         self.results['overall_score'] = self._calculate_overall_score()
@@ -122,7 +136,24 @@ class ComprehensiveTesting:
         scores = []
         weights = []
         
-        # Traditional metrics score (weight: 30%)
+        # Gradle Build score (weight: 40%) - MOST IMPORTANT
+        gradle_score = 0
+        gradle_result = self.results.get('gradle_build', {})
+        
+        if gradle_result.get('success', False):
+            gradle_score = 100  # Full points for passing build
+        else:
+            # Partial credit based on error count
+            error_count = gradle_result.get('error_count', 0)
+            if error_count == 0:
+                gradle_score = 50  # Some other issue
+            else:
+                gradle_score = max(0, 100 - (error_count * 10))  # -10 per error
+        
+        scores.append(gradle_score)
+        weights.append(0.40)
+        
+        # Traditional metrics score (weight: 25%)
         traditional_score = 0
         metrics = self.results.get('traditional_metrics', {})
         
@@ -140,7 +171,7 @@ class ComprehensiveTesting:
         traditional_score += min(25, common_ratio * 0.25)
         
         scores.append(traditional_score)
-        weights.append(0.30)
+        weights.append(0.25)
         
         # LLM Judge score (weight: 40%)
         llm_report = self.results.get('llm_judge', '')
@@ -210,6 +241,44 @@ class ComprehensiveTesting:
         ui_eval = self.results.get('multimodal', {}).get('ui', {})
         platform_eval = self.results.get('multimodal', {}).get('platform', {})
         report += self.multimodal_eval.generate_report(ui_eval, platform_eval)
+        
+        # Add Gradle build results (NEW)
+        report += "\n---\n\n"
+        report += "## Gradle Build Verification\n\n"
+        
+        gradle = self.results.get('gradle_build', {})
+        if gradle:
+            success = gradle.get('success', False)
+            status = gradle.get('status', 'unknown')
+            duration = gradle.get('duration_seconds', 0)
+            error_count = gradle.get('error_count', 0)
+            
+            report += f"**Build Status:** {'✓ PASSED' if success else '✗ FAILED'}\n"
+            report += f"**Status:** `{status}`\n"
+            report += f"**Duration:** {duration:.1f}s\n"
+            report += f"**Errors:** {error_count}\n\n"
+            
+            if gradle.get('gradle_version'):
+                report += f"**Gradle Version:** {gradle['gradle_version']}\n"
+            if gradle.get('kotlin_version'):
+                report += f"**Kotlin Version:** {gradle['kotlin_version']}\n"
+            
+            if gradle.get('errors'):
+                report += "\n### Compilation Errors\n\n"
+                for i, error in enumerate(gradle['errors'][:10], 1):
+                    report += f"{i}. **{error['error_type']}** in `{error['file']}`"
+                    if error.get('line'):
+                        report += f" (line {error['line']})"
+                    report += f"\n   ```\n   {error['message']}\n   ```\n"
+                    if error.get('suggestion'):
+                        report += f"   \n   💡 **Fix:** {error['suggestion']}\n"
+            
+            if gradle.get('suggestions'):
+                report += "\n### Recommendations\n\n"
+                for suggestion in gradle['suggestions'][:5]:
+                    report += f"- {suggestion}\n"
+        else:
+            report += "*Gradle build verification not performed*\n"
         
         # Add action items
         report += f"""
